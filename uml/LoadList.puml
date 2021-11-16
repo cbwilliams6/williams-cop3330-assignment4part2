@@ -1,0 +1,13 @@
+@startuml
+
+class LoadList {
+    fileChooser: FileChooser
+    selectedFile: File
+    directory: String
+    oldFile: File
+    newFile: File
+
+    {method} loadLists(): void
+}
+
+@enduml

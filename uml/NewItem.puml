@@ -1,0 +1,12 @@
+@startuml
+
+class NewItem {
+    descText: String
+    dateValue: LocalDate
+    completionText: String
+    newItem: Item
+
+    {method} newItem(String descText, LocalDate dateValue, String completionText): Item
+}
+
+@enduml

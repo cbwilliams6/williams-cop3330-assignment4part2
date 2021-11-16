@@ -1,0 +1,11 @@
+@startuml
+
+class App {
+    root: Parent
+    scene: Scene
+
+    {method} main(args: String[]): void
+    {method} start(Stage mainStage): void
+}
+
+@enduml

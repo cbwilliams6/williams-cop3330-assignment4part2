@@ -1,0 +1,17 @@
+@startuml
+
+class SaveList {
+    description: SimpleStringProperty
+    dueDate: LocalDate
+    completion: SimpleStringProperty
+
+    {method} Item(String description, LocalDate dueDate, String completion)
+    {method} getDescription(): String
+    {method} setDescription(String description): void
+    {method} getDueDate(): LocalDate
+    {method} setDueDate(LocalDate dueDate): void
+    {method} getCompletion(): String
+    {method} setCompletion(String completion): void
+}
+
+@enduml

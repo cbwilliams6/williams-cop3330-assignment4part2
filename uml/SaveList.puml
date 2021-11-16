@@ -1,0 +1,12 @@
+@startuml
+
+class SaveList {
+    directoryChooser: DirectoryChooser
+    selectedDirectory: File
+    oldFile: File
+    newFile: File
+
+    {method} saveList(): void
+}
+
+@enduml

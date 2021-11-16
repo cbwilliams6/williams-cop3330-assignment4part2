@@ -1,0 +1,12 @@
+@startuml
+
+class FillTable {
+    itemScanner: Scanner
+    data: String[]
+    dueDate: LocalDate[]
+    addedItem: Item
+
+    {method} fillTable(Scanner itemScanner): Item
+}
+
+@enduml

@@ -1,0 +1,12 @@
+@startuml
+
+class ItemWriter {
+    itemList: List<List<String>>
+    writer: FileWriter
+    j: int
+    k: int
+
+    {method} itemWriter(List<List<String>> itemList): void
+}
+
+@enduml

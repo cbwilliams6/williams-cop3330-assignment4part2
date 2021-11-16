@@ -1,0 +1,27 @@
+@startuml
+
+class Controller {
+    todo_tableView: TableView<Item>
+    todo_tableDescription: TableColumn<Item, String>
+    todo_tableDate: TableColumn<Item, LocalDate>
+    todo_tableCompletion: TableColumn<Item, String>
+    descriptionField: TextField
+    dateField: DatePicker
+    completionField: ChoiceBox
+
+    {method} fillTable(): void
+    {method} newItem(): void
+    {method} editItem(): void
+    {method} removeItem(): void
+    {method} removeAll(): void
+    {method} showAll(): void
+    {method} showIncomplete(): void
+    {method} showComplete(): void
+    {method} itemWriter(): void
+    {method} saveList(): void
+    {method} loadLists(): void
+    {method} initialize(): void
+    {method} clickedItem(MouseEvent clicked): void
+}
+
+@enduml
