@@ -1,6 +1,10 @@
+/*
+ *  UCF COP3330 Fall 2021 Assignment 4 Solution
+ *  Copyright 2021 Christian Williams
+ */
+
 package ucf.assignments;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.util.Scanner;

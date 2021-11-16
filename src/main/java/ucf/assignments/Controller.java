@@ -3,6 +3,9 @@
  *  Copyright 2021 Christian Williams
  */
 
+/* Note: the methods for editing and removing items, as well as the different showing options aren't in separate classes as it's really just not needed
+*  it's a bit messier like this, but they all manipulate the table and fields in pretty much every line, so different classes just isn't practical */
+
 package ucf.assignments;
 
 import javafx.collections.FXCollections;
@@ -11,11 +14,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,13 +32,14 @@ public class Controller {
 
     public void fillTable() throws FileNotFoundException {
         // setting up a scanner so we can read through the .txt file
-        String directory = ".\\src\\main\\java\\ucf\\assignments\\List.txt";
-        Scanner itemScanner = new Scanner(new File(directory));
+        Scanner itemScanner = new Scanner(new File(".\\src\\main\\java\\ucf\\assignments\\List.txt"));
 
         // adding every item to the tableview
         while (itemScanner.hasNextLine()) {
             todo_tableView.getItems().add(FillTable.fillTable(itemScanner));
         }
+
+        itemScanner.close();
     }
 
     public void newItem() throws IOException {
@@ -73,7 +74,7 @@ public class Controller {
         Item itemSelected = todo_tableView.getSelectionModel().getSelectedItem();
         int itemIndex = todo_tableView.getSelectionModel().getSelectedIndex();
 
-        // removing the item from the table based on whatever its name is
+        // removing the item from the table
         todo_tableView.getItems().remove(itemSelected);
 
         // checking if an item is actually selected before removing it from the .txt file
@@ -126,9 +127,6 @@ public class Controller {
     }
 
     public void itemWriter() throws IOException {
-        // this is the function where the list of lists matters
-        // setting up a filewriter for the current list
-        FileWriter writer = new FileWriter(".\\src\\main\\java\\ucf\\assignments\\List.txt");
         List <List<String>> itemList = new ArrayList<>();
 
         // just looping through the whole table
@@ -144,83 +142,18 @@ public class Controller {
             itemList.get(i).add(", " + item.getCompletion());
         }
 
-        // looping through the entire list, so we can loop through every arraylist
-        for (int j = 0; j < itemList.size(); j++) {
-            // then looping through a single arraylist to write its data
-            for (int k = 0; k < itemList.get(j).size(); k++) {
-                // writing every parameter to the .txt file, with separations
-                writer.write(itemList.get(j).get(k));
-            }
-            // checking if we're on the 2nd to last arraylist
-            if (j == itemList.size() - 1)
-                continue;
-            else
-                // printing a linebreak if not, since we don't want an extra linebreak at the very end
-                writer.write("\n");
-        }
-
-        writer.close();
+        ItemWriter.itemWriter(itemList);
     }
 
     public void saveList() throws IOException {
-        // prompting the user to choose a directory to save the file
-        DirectoryChooser directoryChooser = new DirectoryChooser();
-        File selectedDirectory = directoryChooser.showDialog(null);
-
-        // checking that the user selected a directory properly
-        if (selectedDirectory != null ) {
-            // creating a File variable for the file that already exists in the ucf.assignments directory
-            File oldFile = new File(".\\src\\main\\java\\ucf\\assignments\\List.txt");
-            // another File variable for the location where the new file will be copied and saved to
-            File newFile = new File(selectedDirectory.getAbsolutePath() + "\\List.txt");
-
-            // checking if a list already exists in the new directory
-            if (newFile.exists()) {
-                System.out.println("Didn't create duplicate file");
-            }
-            else {
-                // copying the file to wherever the user wants it to be saved to
-                Files.copy(oldFile.toPath(), newFile.toPath());
-            }
-        }
-        else {
-            System.out.println("Something went wrong");
-        }
+        SaveList.saveList();
     }
 
     public void loadLists() throws IOException {
-        // this time the user is prompted to choose their external lists file
-        FileChooser fileChooser = new FileChooser();
-        // the file selection window will only show .txt files, which is what every list is saved as
-        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT Files", "*.txt"));
-        // allows selecting multiple files at once
-        File selectedFile = fileChooser.showOpenDialog(null);
+        LoadList.loadLists();
 
-        // checking that the user actually selected a file and it's a list file
-        if (selectedFile != null && selectedFile.getName().equals("List.txt")) {
-            // setting the directory to be the existing list
-            String directory = ".\\src\\main\\java\\ucf\\assignments\\List.txt";
-
-            // setting File variable to whatever directory the file being loaded is in right now
-            File oldFile = new File(selectedFile.getAbsolutePath());
-            // another File variable that just points to the lists folder
-            File newFile = new File(directory);
-
-            // checking that the file being loaded isn't already in the lists folder
-            if (newFile.exists()) {
-                newFile.delete();
-                Files.copy(oldFile.toPath(), newFile.toPath());
-            }
-            else {
-                Files.copy(oldFile.toPath(), newFile.toPath());
-            }
-
-            todo_tableView.getItems().clear();
-            fillTable();
-        }
-        else {
-            System.out.println("Something went wrong");
-        }
+        todo_tableView.getItems().clear();
+        fillTable();
     }
 
     @FXML
@@ -243,6 +176,7 @@ public class Controller {
     {
         int itemIndex = todo_tableView.getSelectionModel().getSelectedIndex();
 
+        // checking if a user clicks an item just once, then changes the bottom fields to whatever that item is
         if (clicked.getClickCount() == 1) {
             if (itemIndex >= 0) {
                 descriptionField.setText(todo_tableView.getSelectionModel().getSelectedItem().getDescription());
@@ -250,6 +184,7 @@ public class Controller {
                 completionField.setValue(todo_tableView.getSelectionModel().getSelectedItem().getCompletion());
             }
         }
+        // clears all the fields if the user double clicks
         else if (clicked.getClickCount() == 2) {
             todo_tableView.getSelectionModel().clearSelection();
             descriptionField.setText(null);
