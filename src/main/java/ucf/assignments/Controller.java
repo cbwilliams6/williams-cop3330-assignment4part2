@@ -48,20 +48,13 @@ public class Controller {
     }
 
     public void newItem() throws IOException {
-        // checking if any of the 3 entry parts are empty
-        if (descriptionField.getText().isEmpty() || dateField.getValue() == null || completionField.getValue() == null) {
-            System.out.println("Didn't add item because something was left empty");
-        }
-        else {
-            // creating a new item with all the entered data
-            Item newItem = new Item(descriptionField.getText(), dateField.getValue(), (String) completionField.getSelectionModel().getSelectedItem());
+        String descText = descriptionField.getText();
+        LocalDate dateValue = dateField.getValue();
+        String completionText = (String) completionField.getSelectionModel().getSelectedItem();
 
-            // then adding that new item to the table
-            todo_tableView.getItems().add(newItem);
+        todo_tableView.getItems().add(NewItem.newItem(descText, dateValue, completionText));
 
-            // and calling on the method that writes it to the .txt file
-            itemWriter();
-        }
+        itemWriter();
     }
 
     public void editItem() throws IOException {
