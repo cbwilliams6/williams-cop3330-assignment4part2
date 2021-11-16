@@ -35,15 +35,9 @@ public class Controller {
         String directory = ".\\src\\main\\java\\ucf\\assignments\\List.txt";
         Scanner itemScanner = new Scanner(new File(directory));
 
-        // looping through until theres no items left
+        // adding every item to the tableview
         while (itemScanner.hasNextLine()) {
-            // setting up an array with a split of ", " since that's just how I formatted the data
-            String[] data = itemScanner.nextLine().split(", ");
-            // changing the data for the date from a string to a LocalDate type
-            LocalDate dueDate = LocalDate.parse(data[1]);
-            // creating an item with the extracted data and adding it to the table
-            Item addedItem = new Item(data[0], dueDate, data[2]);
-            todo_tableView.getItems().add(addedItem);
+            todo_tableView.getItems().add(FillTable.fillTable(itemScanner));
         }
     }
 
