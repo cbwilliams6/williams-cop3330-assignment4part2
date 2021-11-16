@@ -64,8 +64,8 @@
                   <Button mnemonicParsing="false" onAction="#removeAll" prefHeight="39.0" prefWidth="108.0" text="Remove All" />
                   <VBox alignment="TOP_RIGHT" prefHeight="200.0" prefWidth="100.0" spacing="10.0">
                      <children>
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="114.0" text="Save" />
-                        <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="295.0" text="Load" />
+                        <Button mnemonicParsing="false" onAction="#saveList" prefHeight="25.0" prefWidth="114.0" text="Save" />
+                        <Button mnemonicParsing="false" onAction="#loadLists" prefHeight="25.0" prefWidth="295.0" text="Load" />
                      </children>
                   </VBox>
                     </children>

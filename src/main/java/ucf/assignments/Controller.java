@@ -11,8 +11,11 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 
 import java.io.*;
+import java.nio.file.Files;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -170,6 +173,67 @@ public class Controller {
         }
 
         writer.close();
+    }
+
+    public void saveList() throws IOException {
+        // prompting the user to choose a directory to save the file
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(null);
+
+        // checking that the user selected a directory properly
+        if (selectedDirectory != null ) {
+            // creating a File variable for the file that already exists in the ucf.assignments directory
+            File oldFile = new File(".\\src\\main\\java\\ucf\\assignments\\List.txt");
+            // another File variable for the location where the new file will be copied and saved to
+            File newFile = new File(selectedDirectory.getAbsolutePath() + "\\List.txt");
+
+            // checking if a list already exists in the new directory
+            if (newFile.exists()) {
+                System.out.println("Didn't create duplicate file");
+            }
+            else {
+                // copying the file to wherever the user wants it to be saved to
+                Files.copy(oldFile.toPath(), newFile.toPath());
+            }
+        }
+        else {
+            System.out.println("Something went wrong");
+        }
+    }
+
+    public void loadLists() throws IOException {
+        // this time the user is prompted to choose their external lists file
+        FileChooser fileChooser = new FileChooser();
+        // the file selection window will only show .txt files, which is what every list is saved as
+        fileChooser.getExtensionFilters().addAll(new FileChooser.ExtensionFilter("TXT Files", "*.txt"));
+        // allows selecting multiple files at once
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        // checking that the user actually selected a file and it's a list file
+        if (selectedFile != null && selectedFile.getName().equals("List.txt")) {
+            // setting the directory to be the existing list
+            String directory = ".\\src\\main\\java\\ucf\\assignments\\List.txt";
+
+            // setting File variable to whatever directory the file being loaded is in right now
+            File oldFile = new File(selectedFile.getAbsolutePath());
+            // another File variable that just points to the lists folder
+            File newFile = new File(directory);
+
+            // checking that the file being loaded isn't already in the lists folder
+            if (newFile.exists()) {
+                newFile.delete();
+                Files.copy(oldFile.toPath(), newFile.toPath());
+            }
+            else {
+                Files.copy(oldFile.toPath(), newFile.toPath());
+            }
+
+            todo_tableView.getItems().clear();
+            fillTable();
+        }
+        else {
+            System.out.println("Something went wrong");
+        }
     }
 
     @FXML
